@@ -215,7 +215,15 @@ body.is-reset { --accent: var(--amber); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
 /* ── Sheets ─────────────────────────────────────────────────────── */
-.sheet-wrap { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; }
+.sheet-wrap {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
 .sheet-wrap[hidden] { display: none; }
 .scrim { position: absolute; inset: 0; background: rgba(0, 0, 0, .6); }
 
@@ -227,9 +235,12 @@ body.is-reset { --accent: var(--amber); }
   border-bottom: 0;
   border-radius: 20px 20px 0 0;
   padding: 22px 20px calc(var(--safe-b) + 18px);
-  animation: rise .22s ease-out;
+  animation: rise .2s ease-out;
 }
-@keyframes rise { from { transform: translateY(20px); opacity: .5; } }
+
+/* Bewust zonder transform: een verschoven laag kan op iOS zijn aanraakzone
+   op de oude plek houden, waardoor je net naast de knoppen tikt. */
+@keyframes rise { from { opacity: 0; } }
 
 .sheet h2 {
   margin: 0 0 20px;
@@ -264,16 +275,22 @@ body.is-reset { --accent: var(--amber); }
   letter-spacing: -.02em;
 }
 
-.presets { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 20px; }
+.presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 20px;
+}
 
 .preset {
   border: 1px solid var(--hair);
   border-radius: 999px;
   background: none;
   color: var(--fg);
-  padding: 8px 14px;
+  min-height: 46px;
+  padding: 8px 10px;
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   cursor: pointer;
