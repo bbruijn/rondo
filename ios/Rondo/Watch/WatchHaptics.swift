@@ -34,13 +34,20 @@ final class WatchHaptics: CueSink {
         }
     }
 
+    /// `WKInterfaceDevice` hoort op de hoofdthread aangeroepen te worden; de
+    /// engine doet dat al, en `assumeIsolated` maakt dat ook voor de compiler
+    /// waar zonder deze klasse zelf te isoleren.
     private func tap(_ type: WKHapticType, after delay: TimeInterval = 0) {
         guard delay > 0 else {
-            WKInterfaceDevice.current().play(type)
+            MainActor.assumeIsolated {
+                WKInterfaceDevice.current().play(type)
+            }
             return
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            WKInterfaceDevice.current().play(type)
+            MainActor.assumeIsolated {
+                WKInterfaceDevice.current().play(type)
+            }
         }
     }
 }

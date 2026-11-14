@@ -23,7 +23,7 @@ private struct WatchRootView: View {
 
     var body: some View {
         WatchTimerScreen()
-            .task {
+            .onAppear {
                 guard !wired else { return }
                 wired = true
                 engine.add(sink: WatchHaptics())

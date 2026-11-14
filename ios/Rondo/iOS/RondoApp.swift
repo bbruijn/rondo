@@ -21,7 +21,9 @@ private struct RootView: View {
 
     var body: some View {
         TimerScreen()
-            .task {
+            .onAppear {
+                // Synchrone sluiting: erft de hoofdactor van `body`. Een
+                // `.task` is `@Sendable` en zou hier `await` vragen.
                 guard !wired else { return }
                 wired = true
                 engine.add(sink: AudioCoach())

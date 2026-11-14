@@ -19,21 +19,25 @@ final class ExtendedRuntime: NSObject, ObservableObject {
     private var session: WKExtendedRuntimeSession?
 
     func start() {
-        if let existing = session, existing.state == .running || existing.state == .scheduled {
-            return
+        MainActor.assumeIsolated {
+            if let existing = session, existing.state == .running || existing.state == .scheduled {
+                return
+            }
+            let fresh = WKExtendedRuntimeSession()
+            fresh.delegate = self
+            session = fresh
+            fresh.start()
         }
-        let fresh = WKExtendedRuntimeSession()
-        fresh.delegate = self
-        session = fresh
-        fresh.start()
     }
 
     func stop() {
-        if let existing = session, existing.state == .running {
-            existing.invalidate()
+        MainActor.assumeIsolated {
+            if let existing = session, existing.state == .running {
+                existing.invalidate()
+            }
+            session = nil
+            isActive = false
         }
-        session = nil
-        isActive = false
     }
 }
 
