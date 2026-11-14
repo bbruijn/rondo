@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>Rondo</title>
+<meta name="description" content="Intervaltraining als cirkelpartituur.">
+<meta name="theme-color" content="#101217">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rondo">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<main class="stage" id="stage">
+
+  <!-- De cirkelpartituur -->
+  <button class="score" id="score" type="button" aria-label="Starten">
+    <svg class="ring" id="ring" viewBox="0 0 320 320" aria-hidden="true">
+      <g id="arcsDone"></g>
+      <g id="arcsNext"></g>
+      <g id="arcsNow"></g>
+    </svg>
+
+    <div class="readout">
+      <span class="phase" id="phase">Rondo</span>
+      <span class="clock" id="clock">18:30</span>
+      <span class="meta" id="meta">8 rondes · 18:30</span>
+      <span class="cue" id="cue">tik om te starten</span>
+    </div>
+  </button>
+
+  <!-- Instellingen -->
+  <nav class="chips" id="chips" aria-label="Instellingen">
+    <button class="chip" type="button" data-field="work"><small>Werk</small><b id="vWork">00:45</b></button>
+    <button class="chip" type="button" data-field="rest"><small>Rust</small><b id="vRest">01:15</b></button>
+    <button class="chip" type="button" data-field="exercises"><small>Oefen.</small><b id="vExercises">1</b></button>
+    <button class="chip" type="button" data-field="rounds"><small>Rondes</small><b id="vRounds">8</b></button>
+    <button class="chip" type="button" data-field="resetRound"><small>Pauze</small><b id="vResetRound">00:00</b></button>
+  </nav>
+
+  <div class="bar">
+    <button class="link" id="btnLibrary" type="button">Bewaard</button>
+    <button class="link" id="btnSave" type="button">Opslaan</button>
+    <button class="link" id="btnReset" type="button">Herstel</button>
+    <button class="link" id="btnSound" type="button" aria-pressed="true">Geluid</button>
+  </div>
+</main>
+
+<!-- Bewerken -->
+<div class="sheet-wrap" id="editWrap" hidden>
+  <div class="scrim" data-close></div>
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+    <h2 id="editTitle">Werk</h2>
+    <div class="dial">
+      <button class="nudge" id="less" type="button" aria-label="Minder">–</button>
+      <output class="dial-value" id="editValue">00:45</output>
+      <button class="nudge" id="more" type="button" aria-label="Meer">+</button>
+    </div>
+    <div class="presets" id="presets"></div>
+    <div class="sheet-bar">
+      <button class="link" data-close type="button">Annuleren</button>
+      <button class="solid" id="editOk" type="button">Klaar</button>
+    </div>
+  </section>
+</div>
+
+<!-- Bewaarde trainingen -->
+<div class="sheet-wrap" id="libWrap" hidden>
+  <div class="scrim" data-close></div>
+  <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="libTitle">
+    <h2 id="libTitle">Bewaarde trainingen</h2>
+    <div class="library" id="library"></div>
+    <div class="sheet-bar">
+      <button class="link" data-close type="button">Sluiten</button>
+    </div>
+  </section>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
