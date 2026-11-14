@@ -4,7 +4,7 @@ import SwiftUI
 
 /// Archivo, variabel, met de breedte-as als verschil tussen de twee stemmen.
 ///
-/// De variabele TTF zit in de bundel (`Fonts/Archivo-Variable.ttf`, OFL) en
+/// De variabele TTF zit in de bundel (`Archivo-Variable.ttf`, OFL) en
 /// wordt via `UIAppFonts` geregistreerd. SwiftUI kan geen variatie-assen
 /// zetten, dus de assen gaan via CoreText en het resultaat komt als
 /// `Font(CTFont)` terug. Staat Archivo er niet, dan valt alles terug op het

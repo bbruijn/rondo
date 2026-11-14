@@ -43,5 +43,11 @@ cd web
 python3 -m http.server 8000
 ```
 
-Op je telefoon: open de gepubliceerde URL in Safari → deelknop → **Zet op
-beginscherm**. Dan draait hij schermvullend en offline.
+## Live
+
+De webversie staat op **https://rondo.webbart.nl** (en op
+`https://bbruijn.github.io/rondo/`). Elke push naar `main` die `web/`
+raakt, publiceert opnieuw via GitHub Actions.
+
+Op je telefoon: open die URL in Safari → deelknop → **Zet op beginscherm**.
+Dan draait hij schermvullend en offline.

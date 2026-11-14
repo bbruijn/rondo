@@ -45,6 +45,41 @@ enum RondoTheme {
     }
 }
 
+/// Een accent als losse componenten, zodat `RondoDial` de kleurwissel in
+/// 400 ms kan interpoleren — een `Canvas` interpoleert zijn invoer niet zelf,
+/// dus de ring zou anders springen, en de huisstijl zegt: verandering reist.
+struct RondoAccent: Equatable {
+    var red: Double
+    var green: Double
+    var blue: Double
+
+    init(red: Double, green: Double, blue: Double) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+    }
+
+    init(hex: UInt32) {
+        self.init(red: Double((hex >> 16) & 0xFF) / 255,
+                  green: Double((hex >> 8) & 0xFF) / 255,
+                  blue: Double(hex & 0xFF) / 255)
+    }
+
+    var color: Color { Color(.sRGB, red: red, green: green, blue: blue, opacity: 1) }
+}
+
+extension RondoTheme {
+    static func accentParts(for phase: Phase?, scheme: ColorScheme = .dark) -> RondoAccent {
+        let paper = scheme == .light
+        switch phase {
+        case .work: return RondoAccent(hex: paper ? 0xE31B50 : 0xFF2E63)
+        case .rest: return RondoAccent(hex: paper ? 0x00897B : 0x00C2A8)
+        case .reset: return RondoAccent(hex: 0xFFB443)
+        case nil: return RondoAccent(hex: paper ? 0xE31B50 : 0xFF2E63)
+        }
+    }
+}
+
 extension Color {
     init(hex: UInt32) {
         self.init(
