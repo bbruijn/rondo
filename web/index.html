@@ -42,7 +42,7 @@
   <nav class="chips" id="chips" aria-label="Instellingen">
     <button class="chip" type="button" data-field="work"><small>Werk</small><b id="vWork">00:45</b></button>
     <button class="chip" type="button" data-field="rest"><small>Rust</small><b id="vRest">01:15</b></button>
-    <button class="chip" type="button" data-field="exercises"><small>Oefen.</small><b id="vExercises">1</b></button>
+    <button class="chip" type="button" data-field="exercises"><small>Per ronde</small><b id="vExercises">1</b></button>
     <button class="chip" type="button" data-field="rounds"><small>Rondes</small><b id="vRounds">8</b></button>
     <button class="chip" type="button" data-field="resetRound"><small>Pauze</small><b id="vResetRound">00:00</b></button>
   </nav>
@@ -60,6 +60,7 @@
   <div class="scrim" data-close></div>
   <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="editTitle">
     <h2 id="editTitle">Werk</h2>
+    <p class="sheet-note" id="editNote" hidden></p>
     <div class="dial">
       <button class="nudge" id="less" type="button" aria-label="Minder">–</button>
       <output class="dial-value" id="editValue">00:45</output>

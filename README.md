@@ -27,10 +27,15 @@ Zie [`BRAND.md`](BRAND.md) voor de volledige huisstijl, en
 
 ## De rekenwijze
 
-Per ronde krijgt elke oefening werk + rust; tussen rondes eventueel een pauze.
-**De laatste rust vervalt** — de training eindigt op werk.
+Een ronde bestaat uit een aantal **werk-rust-paren** — dat aantal is de
+instelling *Per ronde*. Na een hele ronde kan er een **pauze** staan: extra
+rust bovenop de gewone rust, alleen tussen rondes in. **De laatste rust
+vervalt** — de training eindigt op werk.
 
-Voorbeeld: 01:00 werk, 01:30 rust, 1 oefening, 8 rondes
+Met *Per ronde* op 1 vallen "einde interval" en "einde ronde" samen; de pauze
+voegt dan niets toe en is daarom verborgen zolang hij op nul staat.
+
+Voorbeeld: 01:00 werk, 01:30 rust, 1 per ronde, 8 rondes
 → `8 × (60 + 90) − 90 = 1110 s = 18:30`.
 
 Alle drie de platforms rekenen zo, zodat dezelfde training overal hetzelfde

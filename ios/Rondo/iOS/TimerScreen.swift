@@ -160,7 +160,7 @@ struct TimerScreen: View {
     private var chips: some View {
         VStack(spacing: 10) {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 10) {
-                ForEach(Workout.Field.allCases) { field in
+                ForEach(Workout.Field.allCases.filter { $0.isRelevant(in: engine.workout) }) { field in
                     Button {
                         editing = field
                     } label: {

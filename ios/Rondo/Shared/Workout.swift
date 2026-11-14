@@ -21,9 +21,9 @@ struct Workout: Codable, Equatable {
             switch self {
             case .work: return "Werk"
             case .rest: return "Uitrusten"
-            case .exercises: return "Oefeningen"
+            case .exercises: return "Per ronde"
             case .rounds: return "Rondes"
-            case .resetRound: return "Ronde resetten"
+            case .resetRound: return "Pauze"
             }
         }
 
@@ -32,10 +32,28 @@ struct Workout: Codable, Equatable {
             switch self {
             case .work: return "Werk"
             case .rest: return "Rust"
-            case .exercises: return "Oefen."
+            case .exercises: return "Per ronde"
             case .rounds: return "Rondes"
-            case .resetRound: return "Reset"
+            case .resetRound: return "Pauze"
             }
+        }
+
+        /// Eén regel uitleg onder de titel van de bewerk-sheet. Alleen waar
+        /// de instelling zichzelf niet uitlegt.
+        var note: String? {
+            switch self {
+            case .exercises: return "Hoeveel werk-rust-paren er in één ronde zitten."
+            case .resetRound: return "Extra rust ná een hele ronde, bovenop de gewone rust."
+            default: return nil
+            }
+        }
+
+        /// Pauze heeft pas betekenis vanaf twee paren per ronde. Staat hij op
+        /// nul, dan verbergen we hem; staat er tijd op, dan blijft hij staan —
+        /// anders verstop je een instelling die het programma nog verandert.
+        func isRelevant(in workout: Workout) -> Bool {
+            guard self == .resetRound else { return true }
+            return workout.exercises > 1 || workout.resetRound > 0
         }
 
         /// Duurvelden krijgen minuut/seconde-wielen, tellers één wiel.
@@ -110,7 +128,9 @@ struct Workout: Codable, Equatable {
     var totalDuration: Int { segments.reduce(0) { $0 + $1.duration } }
 
     var summary: String {
-        "\(Self.clock(work)) werk · \(Self.clock(rest)) rust · \(exercises) oef. · \(rounds)× · \(Self.clock(totalDuration))"
+        exercises > 1
+            ? "\(Self.clock(work)) werk · \(Self.clock(rest)) rust · \(rounds)× \(exercises) · \(Self.clock(totalDuration))"
+            : "\(Self.clock(work)) werk · \(Self.clock(rest)) rust · \(rounds)× · \(Self.clock(totalDuration))"
     }
 
     static func clock(_ seconds: Int) -> String {
@@ -132,7 +152,7 @@ enum Phase: String, Codable, CaseIterable {
         switch self {
         case .work: return "Werk"
         case .rest: return "Uitrusten"
-        case .reset: return "Ronde resetten"
+        case .reset: return "Pauze"
         }
     }
 
@@ -141,7 +161,7 @@ enum Phase: String, Codable, CaseIterable {
         switch self {
         case .work: return "Werk"
         case .rest: return "Rust"
-        case .reset: return "Reset"
+        case .reset: return "Pauze"
         }
     }
 }

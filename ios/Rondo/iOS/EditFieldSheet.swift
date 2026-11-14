@@ -28,6 +28,15 @@ struct EditFieldSheet: View {
                     .rondoLabel(11)
                     .foregroundStyle(RondoTheme.bone.opacity(0.5))
 
+                if let note = field.note {
+                    Text(note)
+                        .font(.system(size: 13))
+                        .foregroundStyle(RondoTheme.bone.opacity(0.55))
+                        .multilineTextAlignment(.center)
+                        .padding(.top, -10)
+                        .padding(.horizontal, 8)
+                }
+
                 if field.isDuration {
                     HStack(spacing: 0) {
                         wheel(range: 0...60, selection: $minutes, unit: "min")

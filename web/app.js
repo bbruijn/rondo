@@ -7,9 +7,11 @@
   const FIELDS = {
     work:       { title: 'Werk',           time: true,  min: 1, max: 3600, step: 5, presets: [20, 30, 40, 45, 60, 90] },
     rest:       { title: 'Rust',           time: true,  min: 0, max: 3600, step: 5, presets: [0, 15, 20, 30, 45, 60] },
-    exercises:  { title: 'Oefeningen',     time: false, min: 1, max: 50,   step: 1, presets: [1, 2, 3, 4, 5, 6] },
+    exercises:  { title: 'Per ronde',      time: false, min: 1, max: 50,   step: 1, presets: [1, 2, 3, 4, 5, 6],
+                  note: 'Hoeveel werk-rust-paren er in één ronde zitten.' },
     rounds:     { title: 'Rondes',         time: false, min: 1, max: 99,   step: 1, presets: [3, 4, 5, 6, 8, 10] },
-    resetRound: { title: 'Ronde resetten', time: true,  min: 0, max: 1800, step: 5, presets: [0, 30, 60, 90, 120, 180] }
+    resetRound: { title: 'Pauze',          time: true,  min: 0, max: 1800, step: 5, presets: [0, 30, 60, 90, 120, 180],
+                  note: 'Extra rust ná een hele ronde, bovenop de gewone rust.' }
   };
 
   const PHASES = {
@@ -24,7 +26,7 @@
     done: $('arcsDone'), next: $('arcsNext'), now: $('arcsNow'),
     phase: $('phase'), clock: $('clock'), meta: $('meta'), cue: $('cue'),
     chips: $('chips'),
-    editWrap: $('editWrap'), editTitle: $('editTitle'), editValue: $('editValue'),
+    editWrap: $('editWrap'), editTitle: $('editTitle'), editNote: $('editNote'), editValue: $('editValue'),
     less: $('less'), more: $('more'), presets: $('presets'), editOk: $('editOk'),
     libWrap: $('libWrap'), library: $('library'),
     btnLibrary: $('btnLibrary'), btnSave: $('btnSave'), btnReset: $('btnReset'), btnSound: $('btnSound')
@@ -276,6 +278,8 @@
       if (!node) continue;
       node.textContent = FIELDS[key].time ? fmt(config[key]) : String(config[key]);
     }
+    const pauze = el.chips.querySelector('[data-field="resetRound"]');
+    if (pauze) pauze.hidden = config.exercises < 2 && config.resetRound === 0;
   };
 
   const render = () => {
@@ -297,7 +301,9 @@
     } else if (!state.started) {
       el.phase.textContent = 'Rondo';
       el.clock.textContent = fmt(total);
-      el.meta.textContent = `${config.rounds} rondes · ${config.exercises} oef.`;
+      el.meta.textContent = config.exercises > 1
+        ? `${config.rounds} rondes × ${config.exercises}`
+        : `${config.rounds} rondes`;
       el.cue.textContent = 'tik om te starten';
     } else {
       el.phase.textContent = PHASES[seg.phase].label;
@@ -435,6 +441,8 @@
     draft = config[field];
     const spec = FIELDS[field];
     el.editTitle.textContent = spec.title;
+    el.editNote.textContent = spec.note || '';
+    el.editNote.hidden = !spec.note;
     el.presets.replaceChildren();
     spec.presets.forEach((value) => {
       const b = document.createElement('button');
