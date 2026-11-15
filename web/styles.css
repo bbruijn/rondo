@@ -53,9 +53,13 @@
    dubbeltik-zoom uit — knijpen om te vergroten blijft gewoon werken. */
 button, .chip, .preset, .link, .nudge, .solid, .score, .saved { touch-action: manipulation; }
 
+/* Vaste schil: het document zelf scrolt of verschuift nooit. Alles wat kan
+   scrollen doet dat binnen .stage. Op iOS is dat de enige opzet waarbij een
+   beginscherm-app zijn aanraakzones niet kan laten wegdrijven. */
 html, body {
   margin: 0;
-  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
   background: var(--bg);
   color: var(--fg);
   font-family: Archivo, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -69,16 +73,26 @@ body.is-work { --accent: var(--pulse); }
 body.is-rest { --accent: var(--deep); }
 body.is-reset { --accent: var(--amber); }
 
+body { position: fixed; inset: 0; }
+
 /* ── Toneel ─────────────────────────────────────────────────────── */
 .stage {
-  min-height: 100svh;
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 22px;
   padding: calc(var(--safe-t) + 16px) 14px calc(var(--safe-b) + 14px);
 }
+
+/* Verticaal centreren met auto-marges: anders dan justify-content: center
+   blijft de bovenkant bereikbaar als de inhoud hoger is dan het scherm. */
+.stage > :first-child { margin-top: auto; }
+.stage > :last-child { margin-bottom: auto; }
 
 /* ── De partituur ───────────────────────────────────────────────── */
 .score {
@@ -225,7 +239,7 @@ body.is-reset { --accent: var(--amber); }
 
 /* ── Sheets ─────────────────────────────────────────────────────── */
 .sheet-wrap {
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 20;
 }
@@ -244,7 +258,7 @@ body.is-reset { --accent: var(--amber); }
   border: 1px solid var(--hair);
   border-bottom: 0;
   border-radius: 20px 20px 0 0;
-  padding: 22px 20px calc(var(--safe-b) + 18px);
+  padding: 22px 20px calc(var(--safe-b) + 24px);
   animation: rise .2s ease-out;
 }
 
