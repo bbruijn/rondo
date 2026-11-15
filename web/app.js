@@ -409,26 +409,7 @@
   const toggle = () => (state.running ? pause() : start());
 
   /* ── Bewerken ─────────────────────────────────────────────────── */
-  let editing = null, draft = 0, lockedAt = 0;
-
-  // iOS raakt een vaste laag aan op de plek van vóór het scrollen, waardoor
-  // je naast de knoppen tikt. Daarom staat de pagina stil zolang een sheet
-  // open is — en springt hij daarna netjes terug.
-  const lockPage = () => {
-    lockedAt = window.scrollY || 0;
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${lockedAt}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-  };
-
-  const unlockPage = () => {
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    window.scrollTo(0, lockedAt);
-  };
+  let editing = null, draft = 0;
 
   const paintEdit = () => {
     const spec = FIELDS[editing];
@@ -454,16 +435,13 @@
       el.presets.appendChild(b);
     });
     paintEdit();
-    lockPage();
     el.editWrap.hidden = false;
   };
 
   const closeSheets = () => {
-    const wasOpen = !el.editWrap.hidden || !el.libWrap.hidden;
     el.editWrap.hidden = true;
     el.libWrap.hidden = true;
     editing = null;
-    if (wasOpen) unlockPage();
   };
 
   const nudge = (direction) => {
@@ -514,7 +492,6 @@
         el.library.appendChild(b);
       });
     }
-    lockPage();
     el.libWrap.hidden = false;
   };
 

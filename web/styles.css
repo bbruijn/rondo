@@ -49,6 +49,10 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+/* iOS negeert user-scalable=no. touch-action: manipulation zet alleen de
+   dubbeltik-zoom uit — knijpen om te vergroten blijft gewoon werken. */
+button, .chip, .preset, .link, .nudge, .solid, .score, .saved { touch-action: manipulation; }
+
 html, body {
   margin: 0;
   min-height: 100%;
@@ -57,6 +61,7 @@ html, body {
   font-family: Archivo, system-ui, -apple-system, "Segoe UI", sans-serif;
   -webkit-user-select: none;
   user-select: none;
+  overscroll-behavior: none;
   transition: background-color .4s ease, color .4s ease;
 }
 
@@ -222,17 +227,18 @@ body.is-reset { --accent: var(--amber); }
 .sheet-wrap {
   position: fixed;
   inset: 0;
-  height: 100dvh;
   z-index: 20;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
 }
 .sheet-wrap[hidden] { display: none; }
-.scrim { position: absolute; inset: 0; background: rgba(0, 0, 0, .6); }
+/* touch-action: none — slepen op de donkere laag mag de pagina niet scrollen. */
+.scrim { position: absolute; inset: 0; background: rgba(0, 0, 0, .6); touch-action: none; }
 
 .sheet {
-  position: relative;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0 auto;
   width: min(100%, 460px);
   background: var(--bg);
   border: 1px solid var(--hair);
