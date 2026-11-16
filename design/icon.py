@@ -8,6 +8,8 @@ in puls — de training is net begonnen. De kleuren komen uit BRAND.md.
     python3 design/icon.py          # schrijft de iconen voor iOS en de Watch
     python3 design/icon.py --web    # schrijft ook de iconen in web/icons
 
+Let op: web/ staat live. Nieuwe webiconen gaan uit zodra ze op main staan.
+
 Vereist Pillow (pip install pillow).
 """
 import math
