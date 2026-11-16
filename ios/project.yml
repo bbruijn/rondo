@@ -16,6 +16,12 @@ options:
   createIntermediateGroups: true
   developmentLanguage: nl
 
+# Eén plek voor de bundle-id. Op de opdrachtregel te overschrijven voor een
+# proefbuild onder een ander team: RONDO_BUNDLE_BASE=nl.bbruijn.rondo.dev
+settings:
+  base:
+    RONDO_BUNDLE_BASE: nl.bbruijn.rondo
+
 targets:
   Rondo:
     type: application
@@ -31,7 +37,7 @@ targets:
           subpath: "$(CONTENTS_FOLDER_PATH)/Watch"
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: nl.bbruijn.rondo
+        PRODUCT_BUNDLE_IDENTIFIER: $(RONDO_BUNDLE_BASE)
         PRODUCT_NAME: Rondo
         INFOPLIST_FILE: Info-iOS.plist
         GENERATE_INFOPLIST_FILE: "NO"
@@ -51,7 +57,7 @@ targets:
       - path: Rondo/Watch
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: nl.bbruijn.rondo.watchkitapp
+        PRODUCT_BUNDLE_IDENTIFIER: $(RONDO_BUNDLE_BASE).watchkitapp
         PRODUCT_NAME: Rondo Watch App
         INFOPLIST_FILE: Info-Watch.plist
         GENERATE_INFOPLIST_FILE: "NO"
@@ -73,7 +79,7 @@ targets:
       - target: Rondo
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: nl.bbruijn.rondo.tests
+        PRODUCT_BUNDLE_IDENTIFIER: $(RONDO_BUNDLE_BASE).tests
         GENERATE_INFOPLIST_FILE: "YES"
         SWIFT_VERSION: "5.0"
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Rondo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Rondo"

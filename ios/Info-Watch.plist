@@ -27,7 +27,7 @@
 	<key>WKApplication</key>
 	<true/>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>nl.bbruijn.rondo</string>
+	<string>$(RONDO_BUNDLE_BASE)</string>
 	<key>WKBackgroundModes</key>
 	<array>
 		<string>mindfulness</string>
