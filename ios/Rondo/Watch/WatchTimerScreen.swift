@@ -19,7 +19,8 @@ struct WatchTimerScreen: View {
 
     private var dialPage: some View {
         GeometryReader { geometry in
-            let side = min(geometry.size.width, geometry.size.height)
+            // Een paar punten lucht, zodat de ring de rand van het glas niet raakt.
+            let side = min(geometry.size.width, geometry.size.height) - 8
             // De Watch is altijd inkt; het accent volgt de fase.
             let palette = RondoPalette(.dark)
             let accent = palette.accent(for: engine.phase)
@@ -33,6 +34,7 @@ struct WatchTimerScreen: View {
                           accent: accent,
                           ink: palette.fg,
                           weight: 1.1)
+                    .frame(width: side, height: side)
                     .animation(.easeInOut(duration: 0.4), value: engine.phase)
 
                 VStack(spacing: 1) {
@@ -59,7 +61,10 @@ struct WatchTimerScreen: View {
             .accessibilityAddTraits(.isButton)
             .accessibilityHint(engine.isRunning ? "Tik om te pauzeren" : "Tik om te starten")
         }
-        .ignoresSafeArea(edges: .bottom)
+        // Het hele scherm, ook achter de klok: alleen zo staat de ring echt in
+        // het midden. De klok en de paginastipjes vallen in de hoeken buiten
+        // de ring.
+        .ignoresSafeArea()
     }
 
     // MARK: - Pagina 2: instellingen
