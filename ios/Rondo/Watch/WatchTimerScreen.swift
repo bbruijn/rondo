@@ -21,6 +21,9 @@ struct WatchTimerScreen: View {
         GeometryReader { geometry in
             // Een paar punten lucht, zodat de ring de rand van het glas niet raakt.
             let side = min(geometry.size.width, geometry.size.height) - 8
+            // Een fractie onder het midden, zodat de ring vrij blijft van de
+            // klok en het telefoonicoon in de statusbalk rechtsboven.
+            let drop = geometry.size.height * 0.025
             // De Watch is altijd inkt; het accent volgt de fase.
             let palette = RondoPalette(.dark)
             let accent = palette.accent(for: engine.phase)
@@ -53,6 +56,7 @@ struct WatchTimerScreen: View {
                 .padding(.horizontal, side * 0.22)
                 .animation(.easeInOut(duration: 0.4), value: engine.phase)
             }
+            .offset(y: drop)
             .frame(width: geometry.size.width, height: geometry.size.height)
             .contentShape(Rectangle())
             .onTapGesture { engine.toggle() }
@@ -61,9 +65,9 @@ struct WatchTimerScreen: View {
             .accessibilityAddTraits(.isButton)
             .accessibilityHint(engine.isRunning ? "Tik om te pauzeren" : "Tik om te starten")
         }
-        // Het hele scherm, ook achter de klok: alleen zo staat de ring echt in
-        // het midden. De klok en de paginastipjes vallen in de hoeken buiten
-        // de ring.
+        // Het hele scherm, ook achter de klok: alleen zo vult de ring het
+        // scherm. De klok en de paginastipjes vallen in de hoeken buiten de
+        // ring.
         .ignoresSafeArea()
     }
 
