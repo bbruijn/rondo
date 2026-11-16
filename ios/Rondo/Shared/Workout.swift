@@ -19,8 +19,8 @@ struct Workout: Codable, Equatable {
 
         var title: String {
             switch self {
-            case .work: return "Werk"
-            case .rest: return "Uitrusten"
+            case .work: return "Arbeid"
+            case .rest: return "Rust"
             case .exercises: return "Per ronde"
             case .rounds: return "Rondes"
             case .resetRound: return "Pauze"
@@ -30,7 +30,7 @@ struct Workout: Codable, Equatable {
         /// Korte vorm voor de chips op de iPhone en de regels op de Watch.
         var shortTitle: String {
             switch self {
-            case .work: return "Werk"
+            case .work: return "Arbeid"
             case .rest: return "Rust"
             case .exercises: return "Per ronde"
             case .rounds: return "Rondes"
@@ -42,7 +42,7 @@ struct Workout: Codable, Equatable {
         /// de instelling zichzelf niet uitlegt.
         var note: String? {
             switch self {
-            case .exercises: return "Hoeveel werk-rust-paren er in één ronde zitten."
+            case .exercises: return "Hoeveel arbeid-rust-paren er in één ronde zitten."
             case .resetRound: return "Extra rust ná een hele ronde, bovenop de gewone rust."
             default: return nil
             }
@@ -76,8 +76,7 @@ struct Workout: Codable, Equatable {
 
         var step: Int {
             switch self {
-            case .work, .rest: return 5
-            case .resetRound: return 15
+            case .work, .rest, .resetRound: return 5
             case .exercises, .rounds: return 1
             }
         }
@@ -127,10 +126,10 @@ struct Workout: Codable, Equatable {
 
     var totalDuration: Int { segments.reduce(0) { $0 + $1.duration } }
 
+    /// Eén regel voor de lijst met bewaarde trainingen, in dezelfde vorm als
+    /// de webversie: arbeid / rust · oefeningen · rondes · totaal.
     var summary: String {
-        exercises > 1
-            ? "\(Self.clock(work)) werk · \(Self.clock(rest)) rust · \(rounds)× \(exercises) · \(Self.clock(totalDuration))"
-            : "\(Self.clock(work)) werk · \(Self.clock(rest)) rust · \(rounds)× · \(Self.clock(totalDuration))"
+        "\(Self.clock(work)) / \(Self.clock(rest)) · \(exercises) oef. · \(rounds)× · \(Self.clock(totalDuration))"
     }
 
     static func clock(_ seconds: Int) -> String {
@@ -150,8 +149,8 @@ enum Phase: String, Codable, CaseIterable {
     /// De toon is Nederlands en kort; geen uitroeptekens.
     var label: String {
         switch self {
-        case .work: return "Werk"
-        case .rest: return "Uitrusten"
+        case .work: return "Arbeid"
+        case .rest: return "Rust"
         case .reset: return "Pauze"
         }
     }
@@ -159,7 +158,7 @@ enum Phase: String, Codable, CaseIterable {
     /// Korter label voor de Watch, waar de breedte telt.
     var shortLabel: String {
         switch self {
-        case .work: return "Werk"
+        case .work: return "Arbeid"
         case .rest: return "Rust"
         case .reset: return "Pauze"
         }

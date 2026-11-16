@@ -108,16 +108,19 @@ final class WorkoutEngine: ObservableObject {
         return current?.phase.shortLabel ?? "Rondo"
     }
 
-    var clock: String { Workout.clock(isFinished ? 0 : (hasStarted ? remaining : total)) }
+    /// Vóór de start en na afloop staat het totaal er; onderweg de resttijd
+    /// van het lopende interval.
+    var clock: String { Workout.clock(hasStarted && !isFinished ? remaining : total) }
 
+    /// De regel onder het cijfer, zoals in de webversie.
     var subtitle: String {
-        if isFinished { return "Training van \(Workout.clock(total)) afgerond" }
-        guard hasStarted else { return "Totaal \(Workout.clock(total))" }
-        return "Nog \(Workout.clock(totalRemaining)) van \(Workout.clock(total))"
+        let rounds = workout.rounds == 1 ? "1 ronde" : "\(workout.rounds) rondes"
+        if isFinished { return "\(rounds) afgerond" }
+        guard hasStarted else {
+            return workout.exercises > 1 ? "\(rounds) × \(workout.exercises)" : rounds
+        }
+        return "Ronde \(current?.round ?? 1)/\(workout.rounds) · nog \(Workout.clock(totalRemaining))"
     }
-
-    var roundText: String { "Ronde \(current?.round ?? 1)/\(workout.rounds)" }
-    var exerciseText: String { "Oefening \(current?.exercise ?? 1)/\(workout.exercises)" }
 
     // MARK: - Bediening
 

@@ -10,9 +10,10 @@ import SwiftUI
 /// `Font(CTFont)` terug. Staat Archivo er niet, dan valt alles terug op het
 /// systeemfont — de app blijft dan werken, alleen smaller van stem.
 enum RondoType {
-    /// Cijfers: wdth 85, gewicht 600, tabular-nums.
-    static func numerals(_ size: CGFloat) -> Font {
-        if let font = archivo(size: size, weight: 600, width: 85) {
+    /// Cijfers: wdth 85, gewicht 600, tabular-nums. De chips zetten ze nog
+    /// iets smaller (wdth 80), net als de webversie.
+    static func numerals(_ size: CGFloat, width: CGFloat = 85) -> Font {
+        if let font = archivo(size: size, weight: 600, width: width) {
             return font.monospacedDigit()
         }
         return Font.system(size: size, weight: .semibold).monospacedDigit()
@@ -73,6 +74,16 @@ extension Text {
             .tracking(RondoType.numeralTracking(size))
             .lineLimit(1)
             .minimumScaleFactor(0.5)
+    }
+
+    /// Bijschriften onder het cijfer: als een label, maar een tikje lichter
+    /// (gewicht 600), zodat ze het label erboven niet beconcurreren.
+    func rondoCaption(_ size: CGFloat) -> some View {
+        self.font(RondoType.body(size, weight: 600))
+            .tracking(RondoType.labelTracking(size))
+            .textCase(.uppercase)
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
     }
 
     /// Labels: klein, hoofdletters, ruim gespatieerd.

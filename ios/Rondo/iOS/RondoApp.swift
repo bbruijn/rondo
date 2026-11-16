@@ -8,7 +8,6 @@ struct RondoApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(engine)
-                .preferredColorScheme(.dark)
         }
     }
 }
