@@ -1,40 +1,40 @@
 import SwiftUI
 
-/// De iPhone: de ring is de held, het cijfer staat erin, de instellingen staan
-/// er als chips onder. Geen rijen met vlakken in accentkleur — de huisstijl
-/// houdt accenten bij de ring, het cijfer en één label.
+/// De iPhone, in dezelfde opzet als de webversie: de ring is de held én de
+/// startknop, het cijfer staat erin, de instellingen staan er als één rij
+/// chips onder, en de vier acties zijn tekstlinks. De maten komen uit
+/// `web/styles.css`.
+///
+/// Het scherm volgt de lichte of donkere modus van het toestel: inkt of papier.
 struct TimerScreen: View {
     @EnvironmentObject private var engine: WorkoutEngine
-    @ObservedObject private var link = SyncLink.shared
+    @Environment(\.colorScheme) private var scheme
 
     @State private var editing: Workout.Field?
     @State private var showingSaved = false
     @State private var justSaved = false
 
-    private var accent: RondoAccent { RondoTheme.accentParts(for: engine.phase) }
+    private var palette: RondoPalette { RondoPalette(scheme) }
+    private var accent: RondoAccent { palette.accent(for: engine.phase) }
 
     var body: some View {
         GeometryReader { geometry in
+            // De ring: 88% van de breedte, maar nooit meer dan het halve scherm.
+            let side = min(geometry.size.width * 0.88, geometry.size.height * 0.5, 430)
+
             ScrollView {
-                VStack(spacing: 0) {
-                    header
-                    hero
-                        .padding(.top, 4)
-                    meta
-                        .padding(.top, 14)
-                    controls
-                        .padding(.top, 22)
+                VStack(spacing: 22) {
+                    score(side: side, width: geometry.size.width)
                     chips
-                        .padding(.top, 26)
-                    footer
-                        .padding(.top, 18)
+                    bar
                 }
-                .padding(.bottom, 28)
-                .frame(minHeight: geometry.size.height, alignment: .top)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 16)
+                .frame(maxWidth: .infinity, minHeight: geometry.size.height)
             }
             .scrollBounceBehavior(.basedOnSize)
         }
-        .background(RondoTheme.ink.ignoresSafeArea())
+        .background(palette.bg.ignoresSafeArea())
         .sheet(item: $editing) { field in
             EditFieldSheet(field: field, value: engine.workout[field]) { engine.workout[field] = $0 }
         }
@@ -43,163 +43,116 @@ struct TimerScreen: View {
         }
     }
 
-    // MARK: - Kop
+    // MARK: - De partituur
 
-    private var header: some View {
-        HStack(spacing: 10) {
-            Text("Rondo")
-                .rondoLabel(13)
-                .foregroundStyle(RondoTheme.bone)
+    private func score(side: CGFloat, width: CGFloat) -> some View {
+        Button {
+            engine.toggle()
+        } label: {
+            ZStack {
+                RondoDial(segments: engine.program,
+                          index: engine.index,
+                          fraction: engine.segmentFraction,
+                          isFinished: engine.isFinished,
+                          hasStarted: engine.hasStarted,
+                          accent: accent,
+                          ink: palette.fg,
+                          radiusFraction: 132.0 / 320.0)
 
-            Spacer(minLength: 8)
-
-            if link.isAvailable {
-                Text(link.isReachable ? "Watch" : "Watch ·")
-                    .rondoLabel(10)
-                    .foregroundStyle(RondoTheme.bone.opacity(link.isReachable ? 0.7 : 0.35))
-            }
-
-            Button {
-                engine.isSoundOn.toggle()
-            } label: {
-                Image(systemName: engine.isSoundOn ? "speaker.wave.2" : "speaker.slash")
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundStyle(RondoTheme.bone.opacity(engine.isSoundOn ? 0.8 : 0.4))
-                    .frame(width: 34, height: 34)
-                    .overlay(Circle().strokeBorder(RondoTheme.bone.opacity(0.14), lineWidth: 1))
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(engine.isSoundOn ? "Geluid uitzetten" : "Geluid aanzetten")
-        }
-        .padding(.horizontal, 22)
-        .padding(.top, 8)
-    }
-
-    // MARK: - De ring
-
-    private var hero: some View {
-        ZStack {
-            RondoDial(segments: engine.program,
-                      index: engine.index,
-                      fraction: engine.segmentFraction,
-                      isRunning: engine.isRunning,
-                      isFinished: engine.isFinished,
-                      hasStarted: engine.hasStarted,
-                      accent: accent)
-                .animation(.easeInOut(duration: 0.4), value: engine.phase)
-
-            VStack(spacing: 8) {
-                Text(engine.headline)
-                    .rondoLabel(12)
-                    .foregroundStyle(accent.color)
-
-                Text(engine.clock)
-                    .rondoNumerals(78)
-                    .foregroundStyle(accent.color)
-
-                Text(engine.subtitle)
-                    .font(RondoType.body(12))
-                    .foregroundStyle(RondoTheme.bone.opacity(0.5))
-                    .lineLimit(1)
-            }
-            .padding(.horizontal, 54)
-            .animation(.easeInOut(duration: 0.4), value: engine.phase)
-        }
-        .frame(maxWidth: 420)
-        .padding(.horizontal, 18)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(engine.headline), \(engine.clock)")
-    }
-
-    private var meta: some View {
-        let dim = engine.hasStarted ? 0.6 : 0.3
-        return HStack(spacing: 18) {
-            Text(engine.roundText)
-                .rondoLabel(10)
-                .foregroundStyle(RondoTheme.bone.opacity(dim))
-            Text(engine.exerciseText)
-                .rondoLabel(10)
-                .foregroundStyle(RondoTheme.bone.opacity(dim))
-        }
-    }
-
-    // MARK: - Bediening
-
-    private var controls: some View {
-        HStack(spacing: 14) {
-            GhostButton(title: "Herstellen", dimmed: !engine.hasStarted) {
-                engine.reset()
-            }
-
-            Button {
-                engine.toggle()
-            } label: {
-                ZStack {
-                    Circle().strokeBorder(accent.color, lineWidth: 2)
-                    Image(systemName: engine.isRunning ? "pause.fill" : "play.fill")
-                        .font(.system(size: 24, weight: .medium))
+                VStack(spacing: 2) {
+                    Text(engine.shortHeadline)
+                        .rondoLabel(clamp(width * 0.029, 11, 13))
                         .foregroundStyle(accent.color)
-                }
-                .frame(width: 76, height: 76)
-            }
-            .buttonStyle(.plain)
-            .animation(.easeInOut(duration: 0.4), value: engine.phase)
-            .accessibilityLabel(engine.isRunning ? "Pauzeren" : "Starten")
 
-            GhostButton(title: justSaved ? "Bewaard" : "Bewaren") {
+                    Text(engine.clock)
+                        .rondoNumerals(clamp(width * 0.17, 54, 96))
+                        .foregroundStyle(palette.fg)
+                        .padding(.top, 2)
+                        .padding(.bottom, 4)
+
+                    Text(engine.subtitle)
+                        .rondoCaption(clamp(width * 0.026, 10, 12))
+                        .foregroundStyle(palette.mute)
+
+                    // Verdwijnt zodra de training loopt, net als op het web.
+                    Text("Tik om te starten")
+                        .rondoCaption(11)
+                        .foregroundStyle(palette.mute)
+                        .padding(.top, 14)
+                        .opacity(engine.hasStarted ? 0 : 1)
+                }
+                .padding(.horizontal, side * 0.16)
+            }
+            .frame(width: side, height: side)
+            .contentShape(Circle())
+            .animation(.easeInOut(duration: 0.4), value: accent)
+        }
+        .buttonStyle(QuietButtonStyle())
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(engine.isRunning ? "Pauzeren" : "Starten")
+        .accessibilityValue("\(engine.shortHeadline), \(engine.clock)")
+    }
+
+    // MARK: - Instelchips
+
+    private var chips: some View {
+        HStack(spacing: 6) {
+            ForEach(Workout.Field.allCases.filter { $0.isRelevant(in: engine.workout) }) { field in
+                Button {
+                    editing = field
+                } label: {
+                    VStack(spacing: 1) {
+                        Text(field.shortTitle)
+                            .font(RondoType.body(8.5, weight: 700))
+                            .tracking(0.04 * 8.5)
+                            .textCase(.uppercase)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.8)
+                            .foregroundStyle(palette.mute)
+                        Text(display(field))
+                            .font(RondoType.numerals(15, width: 80))
+                            .lineLimit(1)
+                            .foregroundStyle(palette.fg)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 8)
+                    .padding(.bottom, 9)
+                    .padding(.horizontal, 4)
+                }
+                .buttonStyle(OutlineButtonStyle(shape: Capsule(),
+                                                border: isActive(field) ? accent.color : palette.hair,
+                                                pressed: palette.raised))
+                .animation(.easeInOut(duration: 0.2), value: isActive(field))
+            }
+        }
+        .frame(maxWidth: 460)
+    }
+
+    // MARK: - Onderbalk
+
+    private var bar: some View {
+        HStack(spacing: 2) {
+            LinkButton(title: "Bewaard", color: palette.mute) {
+                showingSaved = true
+            }
+            LinkButton(title: justSaved ? "Bewaard" : "Opslaan", color: palette.mute) {
                 engine.saveCurrent()
                 justSaved = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { justSaved = false }
             }
-        }
-        .padding(.horizontal, 22)
-    }
-
-    // MARK: - Instellingen als chips
-
-    private var chips: some View {
-        VStack(spacing: 10) {
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 10) {
-                ForEach(Workout.Field.allCases.filter { $0.isRelevant(in: engine.workout) }) { field in
-                    Button {
-                        editing = field
-                    } label: {
-                        SettingChip(title: field.shortTitle,
-                                    value: display(field),
-                                    accent: accent.color,
-                                    isActive: isActive(field))
-                    }
-                    .buttonStyle(.plain)
-                }
-
-                Button {
-                    showingSaved = true
-                } label: {
-                    SettingChip(title: "Trainingen",
-                                value: engine.saved.isEmpty ? "—" : "\(engine.saved.count)",
-                                accent: accent.color,
-                                isActive: false)
-                }
-                .buttonStyle(.plain)
+            LinkButton(title: "Herstel", color: palette.mute) {
+                engine.reset()
             }
+            LinkButton(title: "Geluid", color: palette.mute) {
+                engine.isSoundOn.toggle()
+            }
+            .opacity(engine.isSoundOn ? 1 : 0.45)
+            .accessibilityValue(engine.isSoundOn ? "Aan" : "Uit")
         }
-        .padding(.horizontal, 18)
-    }
-
-    private var footer: some View {
-        Text("Geluid mengt door je muziek heen en loopt door met het scherm op slot.")
-            .font(RondoType.body(11))
-            .foregroundStyle(RondoTheme.bone.opacity(0.4))
-            .multilineTextAlignment(.center)
-            .padding(.horizontal, 36)
     }
 
     private func display(_ field: Workout.Field) -> String {
-        switch field {
-        case .rounds: return "\(engine.workout.rounds)×"
-        case .exercises: return "\(engine.workout.exercises)"
-        default: return Workout.clock(engine.workout[field])
-        }
+        field.isDuration ? Workout.clock(engine.workout[field]) : "\(engine.workout[field])"
     }
 
     /// Markeert de chip van de fase die nu loopt.
@@ -210,59 +163,58 @@ struct TimerScreen: View {
         default: return false
         }
     }
+
+    private func clamp(_ value: CGFloat, _ low: CGFloat, _ high: CGFloat) -> CGFloat {
+        min(high, max(low, value))
+    }
 }
 
 // MARK: - Onderdelen
 
-/// Compacte chip: klein label, groot cijfer, geen gekleurd vlak.
-struct SettingChip: View {
+/// Een tekstlink zoals in de onderbalk en de sheets van de webversie.
+struct LinkButton: View {
     let title: String
-    let value: String
-    let accent: Color
-    let isActive: Bool
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .rondoLabel(9)
-                .foregroundStyle(RondoTheme.bone.opacity(0.45))
-            Text(value)
-                .font(RondoType.numerals(20))
-                .tracking(RondoType.numeralTracking(20))
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
-                .foregroundStyle(isActive ? accent : RondoTheme.bone)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 11)
-        .background(RondoTheme.inkRaised)
-        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .strokeBorder(isActive ? accent : RondoTheme.bone.opacity(0.08), lineWidth: 1)
-        )
-        .animation(.easeInOut(duration: 0.4), value: isActive)
-    }
-}
-
-struct GhostButton: View {
-    let title: String
-    var dimmed = false
+    let color: Color
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Text(title)
-                .rondoLabel(10)
-                .foregroundStyle(RondoTheme.bone.opacity(dimmed ? 0.35 : 0.8))
-                .frame(maxWidth: .infinity, minHeight: 44)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .strokeBorder(RondoTheme.bone.opacity(0.14), lineWidth: 1)
-                )
+                .font(RondoType.body(10, weight: 700))
+                .tracking(0.1 * 10)
+                .textCase(.uppercase)
+                .lineLimit(1)
+                .foregroundStyle(color)
+                .padding(.horizontal, 7)
+                .padding(.vertical, 9)
+                // Het raakvlak is hoger dan de tekst, zodat je niet hoeft te mikken.
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(QuietButtonStyle())
+    }
+}
+
+/// Een knop zonder eigen drukeffect: de ring mag niet dimmen als je hem aanraakt.
+struct QuietButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+    }
+}
+
+/// Een omlijnde knop — chip, preset of rij — die alleen bij aanraken een vlak
+/// krijgt. Vlakken dragen nooit een accent.
+struct OutlineButtonStyle<S: InsettableShape>: ButtonStyle {
+    let shape: S
+    let border: Color
+    let pressed: Color
+    var fill: Color = .clear
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(shape.fill(configuration.isPressed ? pressed : fill))
+            .overlay(shape.strokeBorder(border, lineWidth: 1))
+            .contentShape(shape)
     }
 }
 
@@ -270,6 +222,5 @@ struct GhostButton: View {
 #Preview {
     TimerScreen()
         .environmentObject(WorkoutEngine())
-        .preferredColorScheme(.dark)
 }
 #endif

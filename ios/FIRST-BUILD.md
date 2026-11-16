@@ -117,7 +117,7 @@ DEVELOPMENT_TEAM = <TEAMID>
 CODE_SIGN_STYLE = Automatic
 ```
 
-Bundle-ids staan al op `nl.bbruijn.rondo` en `nl.bbruijn.rondo.watchkitapp`.
+Bundle-ids staan al op `nl.webbart.rondo` en `nl.webbart.rondo.watchkitapp`.
 
 ### Op het toestel
 

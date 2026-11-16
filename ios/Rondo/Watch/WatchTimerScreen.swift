@@ -20,16 +20,18 @@ struct WatchTimerScreen: View {
     private var dialPage: some View {
         GeometryReader { geometry in
             let side = min(geometry.size.width, geometry.size.height)
-            let accent = RondoTheme.accentParts(for: engine.phase)
+            // De Watch is altijd inkt; het accent volgt de fase.
+            let palette = RondoPalette(.dark)
+            let accent = palette.accent(for: engine.phase)
 
             ZStack {
                 RondoDial(segments: engine.program,
                           index: engine.index,
                           fraction: engine.segmentFraction,
-                          isRunning: engine.isRunning,
                           isFinished: engine.isFinished,
                           hasStarted: engine.hasStarted,
                           accent: accent,
+                          ink: palette.fg,
                           weight: 1.1)
                     .animation(.easeInOut(duration: 0.4), value: engine.phase)
 
@@ -40,7 +42,7 @@ struct WatchTimerScreen: View {
 
                     Text(engine.clock)
                         .rondoNumerals(side * 0.30)
-                        .foregroundStyle(accent.color)
+                        .foregroundStyle(palette.fg)
 
                     Text(engine.hasStarted ? "\(engine.current?.round ?? 1)/\(engine.workout.rounds)" : Workout.clock(engine.total))
                         .rondoLabel(max(7, side * 0.052))

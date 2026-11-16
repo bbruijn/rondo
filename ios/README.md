@@ -36,7 +36,7 @@ ios/
 └── README.md
 ```
 
-Bundle-id's: `nl.bbruijn.rondo` en `nl.bbruijn.rondo.watchkitapp`.
+Bundle-id's: `nl.webbart.rondo` en `nl.webbart.rondo.watchkitapp`.
 Deployment targets: iOS 17.0, watchOS 10.0. `SWIFT_VERSION = 5.0`.
 
 ## Bouwen en op je telefoon zetten (gratis Apple ID)
@@ -48,7 +48,7 @@ Deployment targets: iOS 17.0, watchOS 10.0. `SWIFT_VERSION = 5.0`.
    **Rondo** → Signing & Capabilities:
    - Automatically manage signing **aan**
    - Team: jouw Personal Team
-   - Bundle Identifier: `nl.bbruijn.rondo` is al ingevuld. Is die id al door
+   - Bundle Identifier: `nl.webbart.rondo` is al ingevuld. Is die id al door
      iemand anders geclaimd, maak er dan iets eigens van (bijvoorbeeld
      `nl.jouwnaam.rondo`) **en pas dan ook** het watch-target aan naar
      `<jouw id>.watchkitapp` **en** `WKCompanionAppBundleIdentifier` in
@@ -96,23 +96,31 @@ Xcode 16).
 Eén `Canvas`, één boog per interval, booglengte evenredig met de duur, startend
 bovenaan en met de klok mee.
 
-- **Dikte draagt het ritme:** werk 0,085 × diameter, reset 0,055, rust 0,032.
-- **Afgelopen** bogen: accent op 20 %. **Lopend:** accent vol, 1,16 × dikker,
-  plus een ademhaling van 2 s (±7 % lijndikte). **Komend:** haarlijnen in bot,
-  waarbij werk nog altijd dikker is dan rust — anders zou je het ritme vóór de
-  start niet meer zien, en juist dat is de belofte van de ring.
-- Binnen de lopende boog is het afgelegde deel vol en de rest 34 %, met een
-  botkleurig streepje op de kop: zo *reist* de voortgang, hij springt niet.
-- **Eén accent tegelijk.** Alle bogen staan in de kleur van de huidige fase;
-  werk en rust verschillen in dikte, niet in kleur. Dat is de uitleg van de
-  twee huisstijlregels naast elkaar ("werkbogen dik, rustbogen dun" en "nooit
-  meer dan één accentkleur tegelijk").
+De ring tekent precies wat de webversie tekent (`web/app.js`), met dezelfde
+maten, zodat de drie platforms er hetzelfde uitzien.
+
+- **Dikte draagt het ritme:** arbeid 12, pauze 7, rust 5, op een straal van
+  132 — de eenheden van het web, die meeschalen met de straal. Alle uiteinden
+  zijn rond.
+- **Komend:** volle dikte in de tekstkleur op 15 %, zodat het ritme van de
+  training vóór de start al leesbaar is. **Afgelopen:** dezelfde dikte op
+  26 %, als streepjes. **Lopend:** het accent van de fase; het afgelegde deel
+  vol, de rest op 22 %. Zo *reist* de voortgang, hij springt niet.
+- **Eén accent tegelijk.** Alleen de lopende boog draagt kleur. Vóór de start
+  en na afloop is er geen accent: label en ring staan in de tekstkleur.
 - Een `Canvas` interpoleert zijn invoer niet, dus de ring zou bij een fasewissel
   van kleur springen. Daarom is `RondoDial` `Animatable` over de
   accentcomponenten (`AnimatablePair`), en kruisvervaagt de ring in 400 ms.
-- `accessibilityReduceMotion` zet alleen de ademhaling uit; de voortgang blijft.
-- De iPhone tekent hem op maximaal 420 pt breed, de Watch vult het scherm met
-  `weight: 1.1`.
+- De iPhone tekent hem op 132/320 van het vlak, net als het web; de Watch vult
+  het scherm met `weight: 1.1`.
+
+### Het scherm (`TimerScreen`)
+
+Dezelfde opzet als de webversie: tik op de ring om te starten of te pauzeren,
+één rij chips voor de instellingen, en vier tekstlinks (Bewaard, Opslaan,
+Herstel, Geluid). De maten komen uit `web/styles.css`. De iPhone volgt de
+lichte of donkere modus van het toestel via `RondoPalette`; de Watch is altijd
+inkt.
 
 ### De klok
 
