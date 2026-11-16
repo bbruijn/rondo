@@ -5,17 +5,17 @@
   const DEFAULTS = { work: 60, rest: 90, exercises: 1, rounds: 8, resetRound: 0 };
 
   const FIELDS = {
-    work:       { title: 'Werk',           time: true,  min: 1, max: 3600, step: 5, presets: [20, 30, 40, 45, 60, 90] },
+    work:       { title: 'Arbeid',         time: true,  min: 1, max: 3600, step: 5, presets: [20, 30, 40, 45, 60, 90] },
     rest:       { title: 'Rust',           time: true,  min: 0, max: 3600, step: 5, presets: [0, 15, 20, 30, 45, 60] },
     exercises:  { title: 'Per ronde',      time: false, min: 1, max: 50,   step: 1, presets: [1, 2, 3, 4, 5, 6],
-                  note: 'Hoeveel werk-rust-paren er in één ronde zitten.' },
+                  note: 'Hoeveel arbeid-rust-paren er in één ronde zitten.' },
     rounds:     { title: 'Rondes',         time: false, min: 1, max: 99,   step: 1, presets: [3, 4, 5, 6, 8, 10] },
     resetRound: { title: 'Pauze',          time: true,  min: 0, max: 1800, step: 5, presets: [0, 30, 60, 90, 120, 180],
                   note: 'Extra rust ná een hele ronde, bovenop de gewone rust.' }
   };
 
   const PHASES = {
-    work:  { label: 'Werk',  klass: 'is-work',  weight: 12 },
+    work:  { label: 'Arbeid', klass: 'is-work', weight: 12 },
     rest:  { label: 'Rust',  klass: 'is-rest',  weight: 5 },
     reset: { label: 'Pauze', klass: 'is-reset', weight: 7 }
   };
@@ -60,8 +60,8 @@
   };
 
   /* ── Programma ────────────────────────────────────────────────── */
-  // Per ronde krijgt elke oefening werk + rust; tussen rondes eventueel een
-  // pauze. De laatste rust vervalt: de training eindigt op werk.
+  // Per ronde krijgt elke oefening arbeid + rust; tussen rondes eventueel een
+  // pauze. De laatste rust vervalt: de training eindigt op arbeid.
   const build = (c) => {
     const out = [];
     for (let round = 1; round <= c.rounds; round++) {
