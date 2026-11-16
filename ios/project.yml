@@ -9,7 +9,7 @@
 # dezelfde twee targets, dezelfde bundle-id's en dezelfde Info.plists.
 name: Rondo
 options:
-  bundleIdPrefix: nl.bbruijn
+  bundleIdPrefix: nl.webbart
   deploymentTarget:
     iOS: "17.0"
     watchOS: "10.0"
@@ -17,10 +17,10 @@ options:
   developmentLanguage: nl
 
 # Eén plek voor de bundle-id. Op de opdrachtregel te overschrijven voor een
-# proefbuild onder een ander team: RONDO_BUNDLE_BASE=nl.bbruijn.rondo.dev
+# proefbuild onder een ander team: RONDO_BUNDLE_BASE=nl.webbart.rondo.dev
 settings:
   base:
-    RONDO_BUNDLE_BASE: nl.bbruijn.rondo
+    RONDO_BUNDLE_BASE: nl.webbart.rondo
 
 targets:
   Rondo:

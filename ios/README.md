@@ -36,7 +36,7 @@ ios/
 └── README.md
 ```
 
-Bundle-id's: `nl.bbruijn.rondo` en `nl.bbruijn.rondo.watchkitapp`.
+Bundle-id's: `nl.webbart.rondo` en `nl.webbart.rondo.watchkitapp`.
 Deployment targets: iOS 17.0, watchOS 10.0. `SWIFT_VERSION = 5.0`.
 
 ## Bouwen en op je telefoon zetten (gratis Apple ID)
@@ -48,7 +48,7 @@ Deployment targets: iOS 17.0, watchOS 10.0. `SWIFT_VERSION = 5.0`.
    **Rondo** → Signing & Capabilities:
    - Automatically manage signing **aan**
    - Team: jouw Personal Team
-   - Bundle Identifier: `nl.bbruijn.rondo` is al ingevuld. Is die id al door
+   - Bundle Identifier: `nl.webbart.rondo` is al ingevuld. Is die id al door
      iemand anders geclaimd, maak er dan iets eigens van (bijvoorbeeld
      `nl.jouwnaam.rondo`) **en pas dan ook** het watch-target aan naar
      `<jouw id>.watchkitapp` **en** `WKCompanionAppBundleIdentifier` in
