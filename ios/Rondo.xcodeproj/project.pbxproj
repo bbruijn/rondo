@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,7 +23,7 @@
 			containerPortal = BB000000000000000000002A /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = BB0000000000000000000017;
-			remoteInfo = "Rondo";
+			remoteInfo = Rondo;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -50,10 +50,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		BB0000000000000000000006 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; name = Shared; path = "Rondo/Shared"; sourceTree = "<group>"; };
-		BB0000000000000000000007 /* iOS */ = {isa = PBXFileSystemSynchronizedRootGroup; name = iOS; path = "Rondo/iOS"; sourceTree = "<group>"; };
-		BB0000000000000000000008 /* Watch */ = {isa = PBXFileSystemSynchronizedRootGroup; name = Watch; path = "Rondo/Watch"; sourceTree = "<group>"; };
-		BB0000000000000000000009 /* RondoTests */ = {isa = PBXFileSystemSynchronizedRootGroup; name = RondoTests; path = "RondoTests"; sourceTree = "<group>"; };
+		BB0000000000000000000006 /* Shared */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = Shared; path = Rondo/Shared; sourceTree = "<group>"; };
+		BB0000000000000000000007 /* iOS */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = iOS; path = Rondo/iOS; sourceTree = "<group>"; };
+		BB0000000000000000000008 /* Watch */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = Watch; path = Rondo/Watch; sourceTree = "<group>"; };
+		BB0000000000000000000009 /* RondoTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = RondoTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,11 +125,11 @@
 				BB0000000000000000000006 /* Shared */,
 				BB0000000000000000000007 /* iOS */,
 			);
-			name = "Rondo";
+			name = Rondo;
 			packageProductDependencies = (
 			);
-			productName = "Rondo";
-			productReference = BB0000000000000000000001 /* Rondo */;
+			productName = Rondo;
+			productReference = BB0000000000000000000001 /* Rondo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		BB0000000000000000000018 /* Rondo Watch App */ = {
@@ -152,7 +152,7 @@
 			packageProductDependencies = (
 			);
 			productName = "Rondo Watch App";
-			productReference = BB0000000000000000000002 /* Rondo Watch App */;
+			productReference = BB0000000000000000000002 /* Rondo Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
 		BB0000000000000000000019 /* RondoTests */ = {
@@ -171,11 +171,11 @@
 			fileSystemSynchronizedGroups = (
 				BB0000000000000000000009 /* RondoTests */,
 			);
-			name = "RondoTests";
+			name = RondoTests;
 			packageProductDependencies = (
 			);
-			productName = "RondoTests";
-			productReference = BB0000000000000000000003 /* RondoTests */;
+			productName = RondoTests;
+			productReference = BB0000000000000000000003 /* RondoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -210,7 +210,6 @@
 			);
 			mainGroup = BB000000000000000000000A;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			productRefGroup = BB000000000000000000000B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -279,7 +278,7 @@
 		};
 		BB000000000000000000001C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = "Rondo";
+			name = Rondo;
 			target = BB0000000000000000000017 /* Rondo */;
 			targetProxy = BB000000000000000000001D /* PBXContainerItemProxy */;
 		};
@@ -290,13 +289,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				RONDO_BUNDLE_BASE = nl.webbart.rondo;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = M7DH682Y23;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -312,6 +311,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				RONDO_BUNDLE_BASE = nl.webbart.rondo;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -324,13 +324,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				RONDO_BUNDLE_BASE = nl.webbart.rondo;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = M7DH682Y23;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -339,6 +339,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				RONDO_BUNDLE_BASE = nl.webbart.rondo;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 5.0;
@@ -357,6 +358,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Info-iOS.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Rondo;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -383,6 +386,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = "Info-iOS.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = Rondo;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
