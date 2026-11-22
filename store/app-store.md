@@ -16,6 +16,7 @@ tussen haakjes zijn de lengte en de limiet van Apple.
 | Support URL | https://rondo.webbart.nl/support.html |
 | Marketing URL | https://rondo.webbart.nl |
 | Copyright | 2026 Bart de Bruijn |
+| Contact-e-mail (App Review) | rondo@webbart.nl |
 | App Privacy | Data Not Collected |
 
 ## English (U.S.)
