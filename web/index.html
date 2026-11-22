@@ -40,19 +40,19 @@
   </button>
 
   <!-- Instellingen -->
-  <nav class="chips" id="chips" aria-label="Instellingen">
-    <button class="chip" type="button" data-field="work"><small>Arbeid</small><b id="vWork">00:45</b></button>
-    <button class="chip" type="button" data-field="rest"><small>Rust</small><b id="vRest">01:15</b></button>
-    <button class="chip" type="button" data-field="exercises"><small>Per ronde</small><b id="vExercises">1</b></button>
-    <button class="chip" type="button" data-field="rounds"><small>Rondes</small><b id="vRounds">8</b></button>
-    <button class="chip" type="button" data-field="resetRound"><small>Pauze</small><b id="vResetRound">00:00</b></button>
+  <nav class="chips" id="chips" aria-label="Instellingen" data-i18n-aria="settings">
+    <button class="chip" type="button" data-field="work"><small data-i18n="work">Arbeid</small><b id="vWork">00:45</b></button>
+    <button class="chip" type="button" data-field="rest"><small data-i18n="rest">Rust</small><b id="vRest">01:15</b></button>
+    <button class="chip" type="button" data-field="exercises"><small data-i18n="perRound">Per ronde</small><b id="vExercises">1</b></button>
+    <button class="chip" type="button" data-field="rounds"><small data-i18n="rounds">Rondes</small><b id="vRounds">8</b></button>
+    <button class="chip" type="button" data-field="resetRound"><small data-i18n="pause">Pauze</small><b id="vResetRound">00:00</b></button>
   </nav>
 
   <div class="bar">
-    <button class="link" id="btnLibrary" type="button">Bewaard</button>
-    <button class="link" id="btnSave" type="button">Opslaan</button>
-    <button class="link" id="btnReset" type="button">Herstel</button>
-    <button class="link" id="btnSound" type="button" aria-pressed="true">Geluid</button>
+    <button class="link" id="btnLibrary" type="button" data-i18n="saved">Bewaard</button>
+    <button class="link" id="btnSave" type="button" data-i18n="save">Opslaan</button>
+    <button class="link" id="btnReset" type="button" data-i18n="reset">Herstel</button>
+    <button class="link" id="btnSound" type="button" aria-pressed="true" data-i18n="sound">Geluid</button>
   </div>
 </main>
 
@@ -63,14 +63,14 @@
     <h2 id="editTitle">Arbeid</h2>
     <p class="sheet-note" id="editNote" hidden></p>
     <div class="dial">
-      <button class="nudge" id="less" type="button" aria-label="Minder">–</button>
+      <button class="nudge" id="less" type="button" aria-label="Minder" data-i18n-aria="less">–</button>
       <output class="dial-value" id="editValue">00:45</output>
-      <button class="nudge" id="more" type="button" aria-label="Meer">+</button>
+      <button class="nudge" id="more" type="button" aria-label="Meer" data-i18n-aria="more">+</button>
     </div>
     <div class="presets" id="presets"></div>
     <div class="sheet-bar">
-      <button class="link" data-close type="button">Annuleren</button>
-      <button class="solid" id="editOk" type="button">Klaar</button>
+      <button class="link" data-close type="button" data-i18n="cancel">Annuleren</button>
+      <button class="solid" id="editOk" type="button" data-i18n="done">Klaar</button>
     </div>
   </section>
 </div>
@@ -79,10 +79,10 @@
 <div class="sheet-wrap" id="libWrap" hidden>
   <div class="scrim" data-close></div>
   <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="libTitle">
-    <h2 id="libTitle">Bewaarde trainingen</h2>
+    <h2 id="libTitle" data-i18n="library">Bewaarde trainingen</h2>
     <div class="library" id="library"></div>
     <div class="sheet-bar">
-      <button class="link" data-close type="button">Sluiten</button>
+      <button class="link" data-close type="button" data-i18n="close">Sluiten</button>
     </div>
   </section>
 </div>

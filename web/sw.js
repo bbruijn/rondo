@@ -2,7 +2,7 @@
    meteen aan bij iedereen die online is, en zonder netwerk start de training
    nog steeds. (De eerste versie was cache-eerst en ververste nooit — wie de
    app al had, bleef op de oude bestanden zitten.) */
-const CACHE = 'rondo-v2';
+const CACHE = 'rondo-v3';
 const ASSETS = ['./', './index.html', './styles.css', './app.js', './manifest.webmanifest',
   './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'];
 

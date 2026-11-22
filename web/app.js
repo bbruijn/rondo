@@ -2,22 +2,64 @@
 (() => {
   'use strict';
 
+  const STRINGS = {
+    nl: {
+      work: 'Arbeid', rest: 'Rust', perRound: 'Per ronde', rounds: 'Rondes', pause: 'Pauze',
+      perRoundNote: 'Hoeveel arbeid-rust-paren er in één ronde zitten.',
+      pauseNote: 'Extra rust ná een hele ronde, bovenop de gewone rust.',
+      start: 'Starten', pauseAction: 'Pauzeren', settings: 'Instellingen',
+      done: 'Klaar', tapStart: 'tik om te starten', tapRestart: 'tik om opnieuw te starten',
+      paused: 'gepauzeerd',
+      saved: 'Bewaard', save: 'Opslaan', reset: 'Herstel', sound: 'Geluid',
+      cancel: 'Annuleren', close: 'Sluiten', less: 'Minder', more: 'Meer', load: 'Laad',
+      library: 'Bewaarde trainingen',
+      empty: 'Nog niets bewaard. Tik op “Opslaan” om deze training te bewaren.',
+      description: 'Intervaltraining als cirkelpartituur.',
+      roundCount: (n) => (n === 1 ? '1 ronde' : `${n} rondes`),
+      roundsDone: (n) => (n === 1 ? '1 ronde afgerond' : `${n} rondes afgerond`),
+      progress: (round, rounds, left) => `Ronde ${round}/${rounds} · nog ${left}`,
+      perRoundShort: (n) => `${n} oef.`
+    },
+    en: {
+      work: 'Work', rest: 'Rest', perRound: 'Per round', rounds: 'Rounds', pause: 'Break',
+      perRoundNote: 'How many work-rest pairs make up one round.',
+      pauseNote: 'Extra rest after a full round, on top of the regular rest.',
+      start: 'Start', pauseAction: 'Pause', settings: 'Settings',
+      done: 'Done', tapStart: 'tap to start', tapRestart: 'tap to start again',
+      paused: 'paused',
+      saved: 'Saved', save: 'Save', reset: 'Reset', sound: 'Sound',
+      cancel: 'Cancel', close: 'Close', less: 'Less', more: 'More', load: 'Load',
+      library: 'Saved workouts',
+      empty: 'Nothing saved yet. Tap “Save” to keep this workout.',
+      description: 'Interval training as a circular score.',
+      roundCount: (n) => (n === 1 ? '1 round' : `${n} rounds`),
+      roundsDone: (n) => (n === 1 ? '1 round completed' : `${n} rounds completed`),
+      progress: (round, rounds, left) => `Round ${round}/${rounds} · ${left} left`,
+      perRoundShort: (n) => `${n} per round`
+    }
+  };
+
+  const preferred = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
+  const LANG = preferred.toLowerCase().startsWith('nl') ? 'nl' : 'en';
+  const LOCALE = LANG === 'nl' ? 'nl-NL' : preferred;
+  const T = STRINGS[LANG];
+
   const DEFAULTS = { work: 60, rest: 90, exercises: 1, rounds: 8, resetRound: 0 };
 
   const FIELDS = {
-    work:       { title: 'Arbeid',         time: true,  min: 1, max: 3600, step: 5, presets: [20, 30, 40, 45, 60, 90] },
-    rest:       { title: 'Rust',           time: true,  min: 0, max: 3600, step: 5, presets: [0, 15, 20, 30, 45, 60] },
-    exercises:  { title: 'Per ronde',      time: false, min: 1, max: 50,   step: 1, presets: [1, 2, 3, 4, 5, 6],
-                  note: 'Hoeveel arbeid-rust-paren er in één ronde zitten.' },
-    rounds:     { title: 'Rondes',         time: false, min: 1, max: 99,   step: 1, presets: [3, 4, 5, 6, 8, 10] },
-    resetRound: { title: 'Pauze',          time: true,  min: 0, max: 1800, step: 5, presets: [0, 30, 60, 90, 120, 180],
-                  note: 'Extra rust ná een hele ronde, bovenop de gewone rust.' }
+    work:       { title: T.work,           time: true,  min: 1, max: 3600, step: 5, presets: [20, 30, 40, 45, 60, 90] },
+    rest:       { title: T.rest,           time: true,  min: 0, max: 3600, step: 5, presets: [0, 15, 20, 30, 45, 60] },
+    exercises:  { title: T.perRound,       time: false, min: 1, max: 50,   step: 1, presets: [1, 2, 3, 4, 5, 6],
+                  note: T.perRoundNote },
+    rounds:     { title: T.rounds,         time: false, min: 1, max: 99,   step: 1, presets: [3, 4, 5, 6, 8, 10] },
+    resetRound: { title: T.pause,          time: true,  min: 0, max: 1800, step: 5, presets: [0, 30, 60, 90, 120, 180],
+                  note: T.pauseNote }
   };
 
   const PHASES = {
-    work:  { label: 'Arbeid', klass: 'is-work', weight: 12 },
-    rest:  { label: 'Rust',  klass: 'is-rest',  weight: 5 },
-    reset: { label: 'Pauze', klass: 'is-reset', weight: 7 }
+    work:  { label: T.work,  klass: 'is-work', weight: 12 },
+    rest:  { label: T.rest,  klass: 'is-rest',  weight: 5 },
+    reset: { label: T.pause, klass: 'is-reset', weight: 7 }
   };
 
   const $ = (id) => document.getElementById(id);
@@ -291,25 +333,25 @@
     if (state.started && !state.finished && seg) document.body.classList.add(PHASES[seg.phase].klass);
 
     el.score.classList.toggle('is-live', state.started);
-    el.score.setAttribute('aria-label', state.running ? 'Pauzeren' : 'Starten');
+    el.score.setAttribute('aria-label', state.running ? T.pauseAction : T.start);
 
     if (state.finished) {
-      el.phase.textContent = 'Klaar';
+      el.phase.textContent = T.done;
       el.clock.textContent = fmt(total);
-      el.meta.textContent = `${config.rounds} rondes afgerond`;
-      el.cue.textContent = 'tik om opnieuw te starten';
+      el.meta.textContent = T.roundsDone(config.rounds);
+      el.cue.textContent = T.tapRestart;
     } else if (!state.started) {
       el.phase.textContent = 'Rondo';
       el.clock.textContent = fmt(total);
       el.meta.textContent = config.exercises > 1
-        ? `${config.rounds} rondes × ${config.exercises}`
-        : `${config.rounds} rondes`;
-      el.cue.textContent = 'tik om te starten';
+        ? `${T.roundCount(config.rounds)} × ${config.exercises}`
+        : T.roundCount(config.rounds);
+      el.cue.textContent = T.tapStart;
     } else {
       el.phase.textContent = PHASES[seg.phase].label;
       el.clock.textContent = fmt(state.remaining);
-      el.meta.textContent = `Ronde ${seg.round}/${config.rounds} · nog ${fmt(total - elapsed)}`;
-      el.cue.textContent = state.running ? '' : 'gepauzeerd';
+      el.meta.textContent = T.progress(seg.round, config.rounds, fmt(total - elapsed));
+      el.cue.textContent = state.running ? '' : T.paused;
     }
 
     [...el.chips.children].forEach((chip) => {
@@ -451,20 +493,20 @@
   };
 
   /* ── Bewaarde trainingen ──────────────────────────────────────── */
-  const describe = (c) => `${fmt(c.work)} / ${fmt(c.rest)} · ${c.exercises} oef. · ${c.rounds}× · ${fmt(totalOf(build(c)))}`;
+  const describe = (c) => `${fmt(c.work)} / ${fmt(c.rest)} · ${T.perRoundShort(c.exercises)} · ${c.rounds}× · ${fmt(totalOf(build(c)))}`;
 
   const saveCurrent = () => {
     const list = read('rondo.saved', []);
     const stamp = new Date();
     const entry = {
       id: String(stamp.getTime()),
-      name: stamp.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' }) + ' ' +
-            stamp.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }),
+      name: stamp.toLocaleDateString(LOCALE, { day: 'numeric', month: 'short' }) + ' ' +
+            stamp.toLocaleTimeString(LOCALE, { hour: '2-digit', minute: '2-digit' }),
       config: { ...config }
     };
     write('rondo.saved', [entry, ...list.filter((i) => describe(i.config) !== describe(entry.config))].slice(0, 12));
     const original = el.btnSave.textContent;
-    el.btnSave.textContent = 'Bewaard';
+    el.btnSave.textContent = T.saved;
     setTimeout(() => { el.btnSave.textContent = original; }, 1200);
   };
 
@@ -474,14 +516,14 @@
     if (!list.length) {
       const p = document.createElement('p');
       p.className = 'empty';
-      p.textContent = 'Nog niets bewaard. Tik op “Opslaan” om deze training te bewaren.';
+      p.textContent = T.empty;
       el.library.appendChild(p);
     } else {
       list.forEach((item) => {
         const b = document.createElement('button');
         b.type = 'button';
         b.className = 'saved';
-        b.innerHTML = `<span><b>${item.name}</b><small>${describe(item.config)}</small></span><span>Laad</span>`;
+        b.innerHTML = `<span><b>${item.name}</b><small>${describe(item.config)}</small></span><span>${T.load}</span>`;
         b.addEventListener('click', () => {
           config = clamp(item.config);
           write('rondo.config', config);
@@ -549,6 +591,11 @@
   window.addEventListener('beforeunload', () => { releaseWake(); endAudioSession(); });
 
   /* ── Start ────────────────────────────────────────────────────── */
+  document.documentElement.lang = LANG;
+  document.querySelectorAll('[data-i18n]').forEach((node) => { node.textContent = T[node.dataset.i18n]; });
+  document.querySelectorAll('[data-i18n-aria]').forEach((node) => { node.setAttribute('aria-label', T[node.dataset.i18nAria]); });
+  document.querySelector('meta[name="description"]')?.setAttribute('content', T.description);
+
   el.btnSound.setAttribute('aria-pressed', String(soundOn));
   renderChips();
   reset();
