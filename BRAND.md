@@ -65,5 +65,5 @@ Eén regel: **verandering reist, hij verschijnt niet.**
 
 ## Toon
 
-Nederlands, kort, geen uitroeptekens. Arbeid, Rust, Ronde, Klaar. De app
+Kort, geen uitroeptekens. Nederlands voor wie zijn toestel op Nederlands heeft staan, Engels voor iedereen anders. Arbeid, Rust, Ronde, Klaar. De app
 spreekt als een coach die naast je staat, niet als een app die juicht.

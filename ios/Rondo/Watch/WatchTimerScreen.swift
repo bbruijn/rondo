@@ -63,7 +63,7 @@ struct WatchTimerScreen: View {
             .accessibilityElement(children: .combine)
             .accessibilityLabel("\(engine.headline), \(engine.clock)")
             .accessibilityAddTraits(.isButton)
-            .accessibilityHint(engine.isRunning ? "Tik om te pauzeren" : "Tik om te starten")
+            .accessibilityHint(engine.isRunning ? String(localized: "Tap to pause") : String(localized: "Tap to start"))
         }
         // Het hele scherm, ook achter de klok: alleen zo vult de ring het
         // scherm. De klok en de paginastipjes vallen in de hoeken buiten de
@@ -91,7 +91,7 @@ struct WatchTimerScreen: View {
 
                 Toggle(isOn: Binding(get: { engine.isSoundOn },
                                      set: { engine.isSoundOn = $0 })) {
-                    Text("Geluid")
+                    Text("Sound")
                         .rondoLabel(9)
                         .foregroundStyle(RondoTheme.bone.opacity(0.6))
                 }
@@ -100,13 +100,13 @@ struct WatchTimerScreen: View {
                 Button {
                     engine.reset()
                 } label: {
-                    Text("Herstellen")
+                    Text("Reset")
                         .rondoLabel(9)
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.bordered)
 
-                Text("Totaal \(Workout.clock(engine.total))")
+                Text("Total \(Workout.clock(engine.total))")
                     .rondoLabel(9)
                     .foregroundStyle(RondoTheme.bone.opacity(0.4))
                     .padding(.top, 2)

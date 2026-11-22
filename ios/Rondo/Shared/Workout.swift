@@ -19,22 +19,22 @@ struct Workout: Codable, Equatable {
 
         var title: String {
             switch self {
-            case .work: return "Arbeid"
-            case .rest: return "Rust"
-            case .exercises: return "Per ronde"
-            case .rounds: return "Rondes"
-            case .resetRound: return "Pauze"
+            case .work: return String(localized: "Work")
+            case .rest: return String(localized: "Rest")
+            case .exercises: return String(localized: "Per round")
+            case .rounds: return String(localized: "Rounds")
+            case .resetRound: return String(localized: "Break")
             }
         }
 
         /// Korte vorm voor de chips op de iPhone en de regels op de Watch.
         var shortTitle: String {
             switch self {
-            case .work: return "Arbeid"
-            case .rest: return "Rust"
-            case .exercises: return "Per ronde"
-            case .rounds: return "Rondes"
-            case .resetRound: return "Pauze"
+            case .work: return String(localized: "Work")
+            case .rest: return String(localized: "Rest")
+            case .exercises: return String(localized: "Per round")
+            case .rounds: return String(localized: "Rounds")
+            case .resetRound: return String(localized: "Break")
             }
         }
 
@@ -42,8 +42,8 @@ struct Workout: Codable, Equatable {
         /// de instelling zichzelf niet uitlegt.
         var note: String? {
             switch self {
-            case .exercises: return "Hoeveel arbeid-rust-paren er in één ronde zitten."
-            case .resetRound: return "Extra rust ná een hele ronde, bovenop de gewone rust."
+            case .exercises: return String(localized: "How many work-rest pairs make up one round.")
+            case .resetRound: return String(localized: "Extra rest after a full round, on top of the regular rest.")
             default: return nil
             }
         }
@@ -129,7 +129,8 @@ struct Workout: Codable, Equatable {
     /// Eén regel voor de lijst met bewaarde trainingen, in dezelfde vorm als
     /// de webversie: arbeid / rust · oefeningen · rondes · totaal.
     var summary: String {
-        "\(Self.clock(work)) / \(Self.clock(rest)) · \(exercises) oef. · \(rounds)× · \(Self.clock(totalDuration))"
+        let perRound = String(localized: "\(exercises) per round")
+        return "\(Self.clock(work)) / \(Self.clock(rest)) · \(perRound) · \(rounds)× · \(Self.clock(totalDuration))"
     }
 
     static func clock(_ seconds: Int) -> String {
@@ -146,21 +147,21 @@ struct Workout: Codable, Equatable {
 enum Phase: String, Codable, CaseIterable {
     case work, rest, reset
 
-    /// De toon is Nederlands en kort; geen uitroeptekens.
+    /// De toon is kort; geen uitroeptekens. Engels in de code, Nederlands via de catalogus.
     var label: String {
         switch self {
-        case .work: return "Arbeid"
-        case .rest: return "Rust"
-        case .reset: return "Pauze"
+        case .work: return String(localized: "Work")
+        case .rest: return String(localized: "Rest")
+        case .reset: return String(localized: "Break")
         }
     }
 
     /// Korter label voor de Watch, waar de breedte telt.
     var shortLabel: String {
         switch self {
-        case .work: return "Arbeid"
-        case .rest: return "Rust"
-        case .reset: return "Pauze"
+        case .work: return String(localized: "Work")
+        case .rest: return String(localized: "Rest")
+        case .reset: return String(localized: "Break")
         }
     }
 }
@@ -175,6 +176,24 @@ struct Segment: Equatable {
 /// Een opgeslagen training in "Trainingen".
 struct SavedWorkout: Codable, Identifiable, Equatable {
     var id = UUID()
+    /// De naam zoals hij bij het bewaren werd gemaakt. Alleen nog in gebruik
+    /// voor trainingen van vóór `savedAt`.
     var name: String
     var workout: Workout
+    /// Wanneer de training bewaard is. Optioneel, zodat oudere opgeslagen
+    /// lijsten zonder dit veld gewoon blijven laden.
+    var savedAt: Date?
+
+    /// De naam in de taal van nu: een taalwissel geldt ook voor wat al bewaard is.
+    var displayName: String {
+        guard let savedAt else { return name }
+        return Self.displayName(for: savedAt)
+    }
+
+    static func displayName(for date: Date, locale: Locale = .autoupdatingCurrent) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.setLocalizedDateFormatFromTemplate("dMMMHHmm")
+        return formatter.string(from: date)
+    }
 }
