@@ -155,10 +155,8 @@ final class WorkoutEngine: ObservableObject {
     // MARK: - Opgeslagen trainingen
 
     func saveCurrent() {
-        let formatter = DateFormatter()
-        formatter.locale = .autoupdatingCurrent
-        formatter.setLocalizedDateFormatFromTemplate("dMMMHHmm")
-        let entry = SavedWorkout(name: formatter.string(from: Date()), workout: workout)
+        let now = Date()
+        let entry = SavedWorkout(name: SavedWorkout.displayName(for: now), workout: workout, savedAt: now)
         saved = ([entry] + saved.filter { $0.workout != workout }).prefix(12).map { $0 }
         Storage.saveSaved(saved)
     }

@@ -176,6 +176,24 @@ struct Segment: Equatable {
 /// Een opgeslagen training in "Trainingen".
 struct SavedWorkout: Codable, Identifiable, Equatable {
     var id = UUID()
+    /// De naam zoals hij bij het bewaren werd gemaakt. Alleen nog in gebruik
+    /// voor trainingen van vóór `savedAt`.
     var name: String
     var workout: Workout
+    /// Wanneer de training bewaard is. Optioneel, zodat oudere opgeslagen
+    /// lijsten zonder dit veld gewoon blijven laden.
+    var savedAt: Date?
+
+    /// De naam in de taal van nu: een taalwissel geldt ook voor wat al bewaard is.
+    var displayName: String {
+        guard let savedAt else { return name }
+        return Self.displayName(for: savedAt)
+    }
+
+    static func displayName(for date: Date, locale: Locale = .autoupdatingCurrent) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = locale
+        formatter.setLocalizedDateFormatFromTemplate("dMMMHHmm")
+        return formatter.string(from: date)
+    }
 }

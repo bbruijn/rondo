@@ -68,7 +68,7 @@ struct SavedWorkoutsSheet: View {
         } label: {
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(entry.name)
+                    Text(entry.displayName)
                         .font(RondoType.body(14, weight: 600))
                         .foregroundStyle(palette.fg)
                     Text(entry.workout.summary)
