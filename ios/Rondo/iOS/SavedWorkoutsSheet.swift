@@ -16,7 +16,7 @@ struct SavedWorkoutsSheet: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Text("Bewaarde trainingen")
+            Text("Saved workouts")
                 .font(RondoType.body(11, weight: 700))
                 .tracking(0.16 * 11)
                 .textCase(.uppercase)
@@ -24,7 +24,7 @@ struct SavedWorkoutsSheet: View {
                 .padding(.bottom, 20)
 
             if engine.saved.isEmpty {
-                Text("Nog niets bewaard. Tik op “Opslaan” om deze training te bewaren.")
+                Text("Nothing saved yet. Tap “Save” to keep this workout.")
                     .font(RondoType.body(13))
                     .foregroundStyle(palette.mute)
                     .multilineTextAlignment(.center)
@@ -44,7 +44,7 @@ struct SavedWorkoutsSheet: View {
             }
 
             HStack {
-                LinkButton(title: "Sluiten", color: palette.mute) { dismiss() }
+                LinkButton(title: String(localized: "Close"), color: palette.mute) { dismiss() }
                 Spacer()
             }
             .padding(.top, 10)
@@ -78,7 +78,7 @@ struct SavedWorkoutsSheet: View {
                         .minimumScaleFactor(0.8)
                 }
                 Spacer(minLength: 0)
-                Text("Laad")
+                Text("Load")
                     .font(RondoType.body(11, weight: 700))
                     .tracking(0.12 * 11)
                     .foregroundStyle(palette.mute)
@@ -93,7 +93,7 @@ struct SavedWorkoutsSheet: View {
             Button(role: .destructive) {
                 engine.delete(entry)
             } label: {
-                Label("Verwijder", systemImage: "trash")
+                Label("Delete", systemImage: "trash")
             }
         }
     }

@@ -202,11 +202,12 @@
 			};
 			buildConfigurationList = BB0000000000000000000026 /* Build configuration list for PBXProject "Rondo" */;
 			compatibilityVersion = "Xcode 15.0";
-			developmentRegion = nl;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				nl,
+				en,
 				Base,
+				nl,
 			);
 			mainGroup = BB000000000000000000000A;
 			minimizedProjectReferenceProxies = 1;

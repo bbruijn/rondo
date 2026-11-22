@@ -75,7 +75,7 @@ struct TimerScreen: View {
                         .foregroundStyle(palette.mute)
 
                     // Verdwijnt zodra de training loopt, net als op het web.
-                    Text("Tik om te starten")
+                    Text("Tap to start")
                         .rondoCaption(11)
                         .foregroundStyle(palette.mute)
                         .padding(.top, 14)
@@ -89,7 +89,7 @@ struct TimerScreen: View {
         }
         .buttonStyle(QuietButtonStyle())
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(engine.isRunning ? "Pauzeren" : "Starten")
+        .accessibilityLabel(engine.isRunning ? String(localized: "Pause") : String(localized: "Start"))
         .accessibilityValue("\(engine.shortHeadline), \(engine.clock)")
     }
 
@@ -132,22 +132,22 @@ struct TimerScreen: View {
 
     private var bar: some View {
         HStack(spacing: 2) {
-            LinkButton(title: "Bewaard", color: palette.mute) {
+            LinkButton(title: String(localized: "Saved"), color: palette.mute) {
                 showingSaved = true
             }
-            LinkButton(title: justSaved ? "Bewaard" : "Opslaan", color: palette.mute) {
+            LinkButton(title: justSaved ? String(localized: "Saved") : String(localized: "Save"), color: palette.mute) {
                 engine.saveCurrent()
                 justSaved = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { justSaved = false }
             }
-            LinkButton(title: "Herstel", color: palette.mute) {
+            LinkButton(title: String(localized: "Reset"), color: palette.mute) {
                 engine.reset()
             }
-            LinkButton(title: "Geluid", color: palette.mute) {
+            LinkButton(title: String(localized: "Sound"), color: palette.mute) {
                 engine.isSoundOn.toggle()
             }
             .opacity(engine.isSoundOn ? 1 : 0.45)
-            .accessibilityValue(engine.isSoundOn ? "Aan" : "Uit")
+            .accessibilityValue(engine.isSoundOn ? String(localized: "On") : String(localized: "Off"))
         }
     }
 

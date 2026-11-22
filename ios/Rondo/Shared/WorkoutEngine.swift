@@ -97,13 +97,13 @@ final class WorkoutEngine: ObservableObject {
 
     /// Het ene label onder het cijfer.
     var headline: String {
-        if isFinished { return "Klaar" }
+        if isFinished { return String(localized: "Done") }
         guard hasStarted else { return "Rondo" }
         return current?.phase.label ?? "Rondo"
     }
 
     var shortHeadline: String {
-        if isFinished { return "Klaar" }
+        if isFinished { return String(localized: "Done") }
         guard hasStarted else { return "Rondo" }
         return current?.phase.shortLabel ?? "Rondo"
     }
@@ -114,12 +114,15 @@ final class WorkoutEngine: ObservableObject {
 
     /// De regel onder het cijfer, zoals in de webversie.
     var subtitle: String {
-        let rounds = workout.rounds == 1 ? "1 ronde" : "\(workout.rounds) rondes"
-        if isFinished { return "\(rounds) afgerond" }
+        let count = workout.rounds
+        let rounds = count == 1 ? String(localized: "1 round") : String(localized: "\(count) rounds")
+        if isFinished { return String(localized: "\(rounds) completed") }
         guard hasStarted else {
             return workout.exercises > 1 ? "\(rounds) × \(workout.exercises)" : rounds
         }
-        return "Ronde \(current?.round ?? 1)/\(workout.rounds) · nog \(Workout.clock(totalRemaining))"
+        let round = current?.round ?? 1
+        let left = Workout.clock(totalRemaining)
+        return String(localized: "Round \(round)/\(count) · \(left) left")
     }
 
     // MARK: - Bediening
@@ -153,8 +156,8 @@ final class WorkoutEngine: ObservableObject {
 
     func saveCurrent() {
         let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "nl_NL")
-        formatter.dateFormat = "d MMM HH:mm"
+        formatter.locale = .autoupdatingCurrent
+        formatter.setLocalizedDateFormatFromTemplate("dMMMHHmm")
         let entry = SavedWorkout(name: formatter.string(from: Date()), workout: workout)
         saved = ([entry] + saved.filter { $0.workout != workout }).prefix(12).map { $0 }
         Storage.saveSaved(saved)

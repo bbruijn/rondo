@@ -40,12 +40,12 @@ struct EditFieldSheet: View {
             }
 
             HStack(spacing: 10) {
-                nudge("–", by: -1, label: "Minder")
+                nudge("–", by: -1, label: String(localized: "Less"))
                 Text(text(for: draft))
                     .rondoNumerals(46)
                     .foregroundStyle(palette.fg)
                     .frame(maxWidth: .infinity)
-                nudge("+", by: 1, label: "Meer")
+                nudge("+", by: 1, label: String(localized: "More"))
             }
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
@@ -67,13 +67,13 @@ struct EditFieldSheet: View {
             .padding(.top, 20)
 
             HStack(spacing: 10) {
-                LinkButton(title: "Annuleren", color: palette.mute) { dismiss() }
+                LinkButton(title: String(localized: "Cancel"), color: palette.mute) { dismiss() }
 
                 Button {
                     onSave(min(field.range.upperBound, max(field.range.lowerBound, draft)))
                     dismiss()
                 } label: {
-                    Text("Klaar")
+                    Text("Done")
                         .font(RondoType.body(12, weight: 700))
                         .tracking(0.14 * 12)
                         .textCase(.uppercase)
