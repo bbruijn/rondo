@@ -17,17 +17,26 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
+# Twee jobs, bewust. In één job vroeg deploy-pages het pakket 0,3 s na de
+# upload al op, terwijl GitHubs lijst met artifacts dan nog niet is
+# bijgewerkt ("Found 0 artifact(s)"). De overgang naar een tweede job geeft
+# die lijst de tijd.
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
